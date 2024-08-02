@@ -1,0 +1,37 @@
+/**
+ * Top-level build file for ftc_app project.
+ *
+ * It is extraordinarily rare that you will ever need to edit this file.
+ */
+
+buildscript {
+    ext {
+        agp_version = '8.3.0'
+        agp_version1 = '8.3.0'
+        agp_version2 = '3.5.0'
+        agp_version3 = '8.3.0'
+        agp_version4 = agp_version1
+        agp_version5 = '8.5.0'
+    }
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        // Note for FTC Teams: Do not modify this yourself.
+        classpath "com.android.tools.build:gradle:$agp_version5"
+    }
+}
+
+// This is now required because aapt2 has to be downloaded from the
+// google() repository beginning with version 3.2 of the Android Gradle Plugin
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
