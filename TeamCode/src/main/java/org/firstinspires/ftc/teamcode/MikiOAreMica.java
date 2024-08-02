@@ -181,10 +181,10 @@ public class MikiOAreMica extends OpMode {
                 rx = gamepad1.right_stick_x;
 
                 /* Liniile astea de cod iau niste variabile care reprezinta puterea fiecarui motor, cu ajutorul puterilor de la controller*/
-                pmotorFL = (y + x + rx)/1.27;
-                pmotorBL = (y - x + rx)/1.27;
-                pmotorBR = (y + x - rx)/1.27;
-                pmotorFR = (y - x - rx)/1.27;
+                pmotorFL = (y + x + rx)/1.17;
+                pmotorBL = (y - x + rx)/1.17;
+                pmotorBR = (y + x - rx)/1.17;
+                pmotorFR = (y - x - rx)/1.17;
 
                 /*Secventele urmatoare de cod stabilesc maximul dintre modulele puterilor motoarelor cu un anumit scop...*/
                 max = abs(pmotorFL);
@@ -451,6 +451,8 @@ public class MikiOAreMica extends OpMode {
                     time_final = Math.max(time_final_left,time_final_right);
                 }
                 if(can_lift_intake){
+                    gamepad1.rumble(500);
+                    gamepad2.rumble(500);
                     can_lift_intake = false;
                     time_final_left = 0;
                     time_final_right = 0;

@@ -407,11 +407,11 @@ public class SubPrograme{
         sugator.setPower(0.7);
     }
     public synchronized void sugere2(){
-        intake.setPosition(0.53);
+        intake.setPosition(0.54);
         sugator.setPower(0.7);
     }
     public synchronized void sugerepixel2(){
-        intake.setPosition(0.6);
+        intake.setPosition(0.62);
         sugator.setPower(0.7);
     }
     public synchronized void scuipare(){
