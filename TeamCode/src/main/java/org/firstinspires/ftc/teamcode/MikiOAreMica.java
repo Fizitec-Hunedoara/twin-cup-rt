@@ -110,10 +110,7 @@ public class MikiOAreMica extends OpMode {
         sunt folosite pentru a face robotul sa mearga in fata dand putere pozitiva la toate cele 4 motoare. */
         motorBL.setDirection(DcMotorEx.Direction.REVERSE);
         motorFL.setDirection(DcMotorEx.Direction.REVERSE);
-
         slider1.setDirection(DcMotorEx.Direction.REVERSE);
-
-
 
 
         /*Liniile astea de cod fac ca motoarele sa poata frana de tot atunci cand ii dai sa franeze*/
@@ -135,8 +132,6 @@ public class MikiOAreMica extends OpMode {
         slider1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slider2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         sugator.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-
-
         /*Liniile astea de cod fac ca robotul sa mearga cu ajutorul encoderelor(maresc precizia)*/
         motorFR.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorFL.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);

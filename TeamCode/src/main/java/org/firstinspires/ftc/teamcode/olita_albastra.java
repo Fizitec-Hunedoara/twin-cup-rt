@@ -37,20 +37,19 @@ public class olita_albastra extends LinearOpMode {
     public Pid_Controller_Adevarat pid = new Pid_Controller_Adevarat(0, 0, 0);
     public SubPrograme p = new SubPrograme(this);
     public boolean faza1 = false,faza2 = false,faza0 = false,faza = false;
-    public TrajectorySequence ts1, ts2, ts3, ts4, stanga, dreapta;
-    boolean ok, ok2;
+    public TrajectorySequence ts1, ts2, ts3, ts4, stanga, dreapta, ts5;
+    boolean ok = false, ok2 = false, bine = false, isCollecting = false;
+    private boolean can_lift_intake = false, started_right = false, started_left = false;
+    private long time_final_left = 0, time_final_right = 0, time_final = 0;
     @Override
     public void runOpMode() throws InterruptedException {
 
         p.init(hardwareMap);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Pose2d startPose = new Pose2d(14.783464, -58.5, Math.toRadians(270));
+        Pose2d startPose = new Pose2d(14.783464, 58.5, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
-
-
-        CV_detectionType = DetectionTypes.DAY_red;
-
+        CV_detectionType = DetectionTypes.DAY_blue;
 
         telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(), telemetry);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -83,25 +82,25 @@ public class olita_albastra extends LinearOpMode {
                 x = pipeline.getRect().x + pipeline.getRect().width / 2.0;
                 telemetry.addData("x:", pipeline.getRect().x + pipeline.getRect().width / 2);
                 if (x > 470) {
-                    varrez = "Stanga";
+                    varrez = "Dreapta";
                 } else if (x > 250 && x < 470) {
                     varrez = "Mijloc";
                 } else if (x < 150) {
-                    varrez = "Dreapta";
+                    varrez = "Stanga";
                 } else {
-                    varrez = "Dreapta";
+                    varrez = "Stanga";
                 }
                 telemetry.addData("caz:", varrez);
                 if (Objects.equals(varrez, "Mijloc")) {
                     ts1 = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(12, -35, Math.toRadians(270)))
+                            .lineToSplineHeading(new Pose2d(8, 35, Math.toRadians(90)))
                             ///.addDisplacementMarker(5, this::erectie)
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
-                                erectie();
+                                erectienoua();
                             })
-                            .lineToSplineHeading(new Pose2d(47, -31.5, Math.toRadians(180)))
-                            // .waitSeconds(0.3)
+                            .lineToLinearHeading(new Pose2d(43.1, 35, Math.toRadians(180)))
+                            .waitSeconds(0.3)
                             .addDisplacementMarker( this::disfunctieerectila)
 
                             .addDisplacementMarker(this::servo)
@@ -109,26 +108,30 @@ public class olita_albastra extends LinearOpMode {
                 }
                 if (Objects.equals(varrez, "Stanga")) {
                     stanga = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(8, -36, Math.toRadians(325) ))
+                            .lineToSplineHeading(new Pose2d(22, 35, Math.toRadians(90) )) //7,34
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
-                                erectie();
+                                erectienoua();
                             })
-                            .lineToSplineHeading(new Pose2d(47, -29, Math.toRadians(180) ))
+                            .lineToLinearHeading(new Pose2d(43.5, 42, Math.toRadians(180) ))
+                            .waitSeconds(0.3)
                             .addDisplacementMarker( this::disfunctieerectila)
                             .addDisplacementMarker(this::servo)
                             .build();
 
                 }
                 if (Objects.equals(varrez, "Dreapta")) {
-                    dreapta = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(22, -39, Math.toRadians(270)))
+                     dreapta = drive.trajectorySequenceBuilder(startPose)
+                            .lineToSplineHeading(new Pose2d(7, 34, Math.toRadians(90)))//22,.38.8
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
-                                erectie();
+                                erectienoua();
                             })
-                            .lineToSplineHeading(new Pose2d(45, -39, Math.toRadians(180) ))
-                            .addDisplacementMarker( this::disfunctieerectila)
+                            .lineToLinearHeading(new Pose2d(32, 44, Math.toRadians(180) ))
+                            .addDisplacementMarker(()-> {
+                                p.kdf(600);
+                                disfunctieerectila();
+                            })
                             .addDisplacementMarker(this::servo)
                             .build();
 
@@ -143,63 +146,111 @@ public class olita_albastra extends LinearOpMode {
             telemetry.update();
         }
         PiD.start();
-
+        Automatizare.start();
 //            drive.followTrajectorySequence(ts1);
 //          //  drive.getPoseEstimate();
 //            drive.followTrajectorySequence(ts2);
         if (Objects.equals(varrez, "Mijloc")) {
             drive.followTrajectorySequence(ts1);
         }
-        if (Objects.equals(varrez, "Stanga")) {
+        if (Objects.equals(varrez, "Dreapta")) {
             drive.followTrajectorySequence(dreapta);
         }
-        if (Objects.equals(varrez, "Dreapta")) {
+        if (Objects.equals(varrez, "Stanga")) {
             drive.followTrajectorySequence(stanga);
         }
 
         ts2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(false)
                 .waitSeconds(0.3)
-                .splineTo(new Vector2d(0, -55), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, -55, Math.toRadians(175)))
-                .addDisplacementMarker( () -> {
+                .splineTo(new Vector2d(10, 55.2), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 55.2, Math.toRadians(185)))
+                .addDisplacementMarker(() -> new Thread(() -> {
                     p.sugere1();
-                })
-                .splineTo(new Vector2d(-64, -31), Math.toRadians(170))
+                    p.kdf(1500);
+                    p.sugerepixel2();
+                    isCollecting = true;
+                    p.kdf(1500);
+                    p.scuipare();
+                }).start())
+                .splineTo(new Vector2d(-64.5, 39), Math.toRadians(192))
                 //.waitSeconds(0.5)
-                .addDisplacementMarker(this::senzor)
-
                 .build();
-        drive.followTrajectorySequence(ts2);
-        p.inchis();
-        p.setSugatorPower(0);
+        if(!isStopRequested()) {
+            drive.followTrajectorySequence(ts2);
+        }
+//        if (bine) {
+
         ts3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
+                /*.addDisplacementMarker(() ->{
+                    p.intake.setPosition(0.668);
+                })
+                .waitSeconds(0.5)
+                .addDisplacementMarker(() ->{
+                    p.intake.setPosition(0.6);
 
-                .splineTo(new Vector2d(-17, -55), Math.toRadians(0))
-                .lineToSplineHeading(new Pose2d(10, -55, Math.toRadians(185)))
-                .addDisplacementMarker( this::erectie)
-                .splineTo(new Vector2d(50, -39), Math.toRadians(0))
+                })
+                .waitSeconds(0.5)*/
+
+                .splineTo(new Vector2d(-25, 55), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(10, 55, Math.toRadians(185)))
+                .addDisplacementMarker(() -> new Thread(() -> {
+                    erectie();
+                    isCollecting = false;
+                    p.sugator.setPower(0);
+                }).start())
+                .splineTo(new Vector2d(49.5, 31), Math.toRadians(0))
+
                 .build();
-        drive.followTrajectorySequence(ts3);
+        if(!isStopRequested()) {
+            drive.followTrajectorySequence(ts3);
+        }
         ts4 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(false)
-                .waitSeconds(0.2)
-                .addDisplacementMarker( () -> {
-                    deschis();
+                .addDisplacementMarker(() -> {
+                    p.deschis();
                     disfunctieerectila();
                     servo();
-                } )
-                .splineTo(new Vector2d(10, -62), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, -59, Math.toRadians(175)))
-                .addDisplacementMarker( () -> {
-                    p.sugere1();
                 })
-                .splineTo(new Vector2d(-64, -31), Math.toRadians(170))
-                .waitSeconds(1)
-                .addDisplacementMarker(this::senzor)
+                .waitSeconds(0.2)
+                .splineTo(new Vector2d(30, 62), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 6251, Math.toRadians(185)))
+                .addDisplacementMarker(() -> {
+                    time_final_left = 0;
+                    time_final_right = 0;
+                    ok = false;
+                    ok2 = false;
+                    isCollecting = true;
+                    p.sugere2();
+                })
+                .splineTo(new Vector2d(-63.4, 39.8), Math.toRadians(190))
+                .waitSeconds(0.5)
+                //.addDisplacementMarker(this::senzor)
                 .build();
-        drive.followTrajectorySequence(ts4);
+        if(!isStopRequested()) {
+            drive.followTrajectorySequence(ts4);
+        }
+        ts5 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .setReversed(true)
+                .addDisplacementMarker(()->p.scuipare())
+                .splineTo(new Vector2d(-25, 56.5), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(11, 56.5, Math.toRadians(175)))
+                .addDisplacementMarker(() -> {
+                    erectie();
+                    isCollecting = false;
+                    p.sugator.setPower(0);
+                })
+                .splineTo(new Vector2d(46.3, 36.9), Math.toRadians(0))
+                .build();
+        if(!isStopRequested()) {
+            drive.followTrajectorySequence(ts5);
+            p.kdf(500);
+            disfunctieerectila();
+            servo();
+            p.kdf(20000);
+        }
+        //}
 
 
 
@@ -244,38 +295,98 @@ public class olita_albastra extends LinearOpMode {
                 }
                 telemetry.addData("color1", p.color1.blue());
                 telemetry.addData("color2", p.color2.blue());
+                telemetry.addData("bine", bine);
                 telemetry.update();
             }
         }
     });
-
+    private final Thread Automatizare = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while(!isStopRequested()) {
+                if (p.color2.blue() > 900 || p.color2.red() > 900) {
+                    ok2 = true;
+                } else ok2 = false;
+                if (p.color1.blue() > 900 || p.color1.red() > 900) {
+                    ok = true;
+                } else ok = false;
+                if(ok && p.sugator.getPower() != 0 && !started_left && isCollecting){
+                    started_left = true;
+                    telemetry.addData("in loop","ok");
+                    telemetry.update();
+                    long lastTime = System.currentTimeMillis();
+                    while(lastTime + 500 > System.currentTimeMillis()){
+                        telemetry.addData("time:",System.currentTimeMillis());
+                        telemetry.update();
+                    }
+                    p.gheara_dreapta.setPosition(0.33);
+                    time_final_left = System.currentTimeMillis();
+                    started_left = false;
+                }
+                if(ok2 && p.sugator.getPower() != 0 && !started_right && isCollecting) {
+                    started_right = true;
+                    telemetry.addData("in loop", "ok");
+                    telemetry.update();
+                    long lastTime = System.currentTimeMillis();
+                    while (lastTime + 500 > System.currentTimeMillis()) {
+                        telemetry.addData("time:", System.currentTimeMillis());
+                        telemetry.update();
+                    }
+                    p.gheara_stanga.setPosition(0.54);
+                    time_final_right = System.currentTimeMillis();
+                    started_right = false;
+                }
+                if(time_final_right != 0 && time_final_left != 0 && !can_lift_intake){
+                    can_lift_intake = true;
+                    time_final = Math.max(time_final_left,time_final_right);
+                }
+                if(can_lift_intake && isCollecting){
+                    can_lift_intake = false;
+                    time_final_left = 0;
+                    time_final_right = 0;
+                    long lastTime = System.currentTimeMillis();
+                    while(lastTime + 750 > System.currentTimeMillis());
+                    p.sugator.setPower(0);
+                    p.intake.setPosition(0.73);
+                }
+            }
+        }
+    });
     public synchronized void erectie(){
         p.kdf(300);
         altceva = true;
         p.ansamblul_leleseana(-200, 5000,15);
+        altceva = false;
         p.kdf(50);
         p.sculare();
         p.kdf(50);
-        altceva = false;
         p.kdf(50);
 
     }
-    public synchronized void deschis(){
-        p.deschis();
-    }
-    public synchronized void disfunctieerectila(){
-
-        //  p.deschis();
+    public synchronized void erectienoua(){
+        p.kdf(300);
         altceva = true;
-        p.slider1.setVelocity(5000);
-        p.slider2.setVelocity(5000);
+        p.ansamblul_leleseana(-150, 5000,15);
+        p.kdf(70);
+        altceva = false;
+        p.kdf(100);
+        p.sculare();
+        p.kdf(50);
+
+
+    }
+    public synchronized void disfunctieerectila( ){
+        p.deschis();
+        p.kdf(200);
+        altceva = true;
+        p.slider1.setVelocity(5000) ;
+        p.slider2.setVelocity(5000) ;
         while (p.taci_dreapta.isPressed() || !p.taci_stanga.isPressed()) {
         }
         p.slider1.setVelocity(0);
         p.slider2.setVelocity(0);
         altceva = false;
         ceva=true;
-
     }
 
     public synchronized void servo(){
@@ -284,42 +395,36 @@ public class olita_albastra extends LinearOpMode {
         p.deschis();
         p.kdf(200);
         p.pleostire();
-        p.kdf(150);
-        p.kdf(150);
+        p.kdf(300);
         p.brat_stanga.setPosition(0.92);
         p.brat_dreapta.setPosition(0.92);
-
     }
 
     public synchronized void senzor(){
 
-        if (p.color1.blue() > 1000) {
+        if (p.color1.blue() > 900          ) {
             ok = true;
         } else ok = false;
         if (ok){
             p.gheara_dreapta.setPosition(0.28);
         }
 
-        if (p.color2.blue() > 1000) {
+        if (p.color2.blue() > 900) {
             ok2 = true;
         } else ok2 = false;
         if (ok2){
             p.gheara_stanga.setPosition(0.47);
         }
+        do {
+            p.setSugatorPower(0.7);
+        } while (!ok && !ok2 && !bine);
 
         if (ok && ok2) {
             p.setSugatorPower(0);
-            p.kdf(100);
+            p.kdf(200);
             p.setSugatorPower(-0.7);
+            p.kdf(100);
+            bine = true;
         }
-
     }
-
-
-
-
-
-
 }
-
-
