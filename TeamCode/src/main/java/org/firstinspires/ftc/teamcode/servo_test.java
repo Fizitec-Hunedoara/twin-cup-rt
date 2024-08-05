@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class servo_test extends OpMode {
     Servo gheara_dreapta, gheara_stanga;
-    Servo stanga, dreapta, intake, incheietura, rotitor, brat_stanga, brat_dreapta;
+    Servo stanga, dreapta, intake, incheietura, rotitor, brat_stanga, brat_dreapta, avion;
     DcMotorEx sugator;
     double poz = 0.366, poz2 = 0.5;
 
@@ -24,6 +24,7 @@ public class servo_test extends OpMode {
         rotitor = hardwareMap.servo.get("rotire");
         brat_dreapta = hardwareMap.servo.get("bratdreapta");
         brat_stanga = hardwareMap.servo.get("bratstanga");
+        avion = hardwareMap.servo.get("avion");
 
 
         sugator = hardwareMap.get(DcMotorEx.class, "sugator");
@@ -56,12 +57,12 @@ public class servo_test extends OpMode {
 //        incheietura.setPosition(poz);
 
 //        if (gamepad2.dpad_left){
-//            poz-=0.001;
+//            poz2-=0.001;
 //        }
 //        if (gamepad2.dpad_right){
-//            poz+=0.001;
+//            poz2+=0.001;
 //        }
-//        gheara_dreapta.setPosition(poz);
+//        gheara_dreapta.setPosition(poz2);
 
         if (gamepad2.dpad_up){
             poz-=0.001;
@@ -69,7 +70,7 @@ public class servo_test extends OpMode {
         if (gamepad2.dpad_down){
             poz+=0.001;
         }
-        intake.setPosition(poz);
+        avion.setPosition(poz);
 
 
 //        brat_dreapta.setPosition(0.92);
@@ -161,7 +162,7 @@ public class servo_test extends OpMode {
 //        gheara_stanga.setPosition(poz2);
 
        // telemetry.addData("stanga", poz2);
-        telemetry.addData("brat ", poz); //0.33  //0.668, 0.633
+        telemetry.addData("avion ", poz); //0.33  //0.668, 0.633
         telemetry.addData("rotire", poz2); //0.54  //
         telemetry.update();
     }

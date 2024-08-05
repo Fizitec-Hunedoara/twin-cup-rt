@@ -16,6 +16,14 @@ public class MeepMeepTesting {
 
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d(14.783464, 58, Math.toRadians(90)))
+                                        .lineToSplineHeading(new Pose2d(22, 35, Math.toRadians(90) ))
+                                        .lineToLinearHeading(new Pose2d(43, 39, Math.toRadians(180) ))
+                                        .splineTo(new Vector2d(10, 51.5), Math.toRadians(180))
+                                        .lineToSplineHeading(new Pose2d(-20, 51.5, Math.toRadians(185)))
+                                        .splineTo(new Vector2d(-64, 36), Math.toRadians(192))
+
+//                                        .lineToSplineHeading(new Pose2d(7, -34, Math.toRadians(325) ))
+//                                        .lineToLinearHeading(new Pose2d(45, -30, Math.toRadians(180) ))
 //                                        .lineToSplineHeading(new Pose2d(22, 38, Math.toRadians(90) ))
                                         //.lineToSplineHeading(new Pose2d(7, 34, Math.toRadians(90)))//22,.38.8
 //                                        .addDisplacementMarker( () -> {
@@ -25,10 +33,10 @@ public class MeepMeepTesting {
 //                                        .lineToLinearHeading(new Pose2d(43, 40, Math.toRadians(180) ))
 //                                        .splineTo(new Vector2d(30, 60), Math.toRadians(180))
 //                                        .lineToSplineHeading(new Pose2d(-20, 60, Math.toRadians(185)))
-                                        .setReversed(true)
-                                        .splineTo(new Vector2d(-25, 55), Math.toRadians(0))
-                                        .lineToSplineHeading(new Pose2d(10, 55, Math.toRadians(185)))
-                                        .splineTo(new Vector2d(49.2, 31), Math.toRadians(0))
+//                                        .setReversed(true)
+//                                        .splineTo(new Vector2d(-25, 55), Math.toRadians(0))
+//                                        .lineToSplineHeading(new Pose2d(10, 55, Math.toRadians(185)))
+//                                        .splineTo(new Vector2d(49.2, 31), Math.toRadians(0))
                                         //.lineToLinearHeading(new Pose2d(32, 44, Math.toRadians(180) ))
 //                                        .addDisplacementMarker(()-> {
 ////                                            p.kdf(600);

@@ -44,7 +44,7 @@ public class MikiOAreMica extends OpMode {
     public DcMotorEx slider1, slider2;
     public TouchSensor taci_dreapta;
     public TouchSensor taci_stanga;
-    public Servo intake, gheara_stanga, gheara_dreapta, rotitor, incheietura, brat_dreapta, brat_stanga;
+    public Servo intake, gheara_stanga, gheara_dreapta, rotitor, incheietura, brat_dreapta, brat_stanga, avion;
     public ColorSensor color1, color2;
    // public DistanceSensor distanta1, distanta2;
     boolean stop = false;
@@ -93,6 +93,7 @@ public class MikiOAreMica extends OpMode {
         incheietura = hardwareMap.servo.get("incheietura");
         brat_dreapta = hardwareMap.servo.get("bratdreapta");
         brat_stanga = hardwareMap.servo.get("bratstanga");
+        avion = hardwareMap.servo.get("avion");// port 5 exp
         //distanta1 = (DistanceSensor)  hardwareMap.get("distanta1");
 
 
@@ -149,7 +150,7 @@ public class MikiOAreMica extends OpMode {
         rotitor.setPosition(0.305);
         brat_stanga.setPosition(0.92);
         brat_dreapta.setPosition(0.92);
-
+        avion.setPosition(0.244);
 
 
 
@@ -309,6 +310,14 @@ public class MikiOAreMica extends OpMode {
                     incheietura.setPosition(0.854);
 
 
+                }
+
+                if (gamepad1.x){
+                    avion.setPosition(0.045);
+                }
+
+                if (gamepad1.b){
+                    avion.setPosition(0.244);
                 }
 
                 if (gamepad2.dpad_down){

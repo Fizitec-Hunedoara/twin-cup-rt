@@ -108,30 +108,33 @@ public class olita_albastra extends LinearOpMode {
                 }
                 if (Objects.equals(varrez, "Stanga")) {
                     stanga = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(22, 35, Math.toRadians(90) )) //7,34
+                            .lineToLinearHeading(new Pose2d(22, 35, Math.toRadians(90) )) //7,34
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(43.5, 42, Math.toRadians(180) ))
-                            .waitSeconds(0.3)
-                            .addDisplacementMarker( this::disfunctieerectila)
+                            .lineToLinearHeading(new Pose2d(35, 34, Math.toRadians(180) ))
+                            .addDisplacementMarker(()-> {
+                                p.kdf(600);
+                                disfunctieerectila();
+                            })
                             .addDisplacementMarker(this::servo)
                             .build();
 
                 }
                 if (Objects.equals(varrez, "Dreapta")) {
                      dreapta = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(7, 34, Math.toRadians(90)))//22,.38.8
+                            .lineToSplineHeading(new Pose2d(7, 34.6, Math.toRadians(45)))//22,.38.8
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(32, 44, Math.toRadians(180) ))
+                            .lineToLinearHeading(new Pose2d(42.8, 27.2, Math.toRadians(180) ))
                             .addDisplacementMarker(()-> {
                                 p.kdf(600);
                                 disfunctieerectila();
                             })
+                             .waitSeconds(0.15)
                             .addDisplacementMarker(this::servo)
                             .build();
 
@@ -163,8 +166,8 @@ public class olita_albastra extends LinearOpMode {
         ts2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(false)
                 .waitSeconds(0.3)
-                .splineTo(new Vector2d(10, 55.2), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, 55.2, Math.toRadians(185)))
+                .splineTo(new Vector2d(10, 51.5), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 51.5, Math.toRadians(185)))
                 .addDisplacementMarker(() -> new Thread(() -> {
                     p.sugere1();
                     p.kdf(1500);
@@ -173,7 +176,7 @@ public class olita_albastra extends LinearOpMode {
                     p.kdf(1500);
                     p.scuipare();
                 }).start())
-                .splineTo(new Vector2d(-64.5, 39), Math.toRadians(192))
+                .splineTo(new Vector2d(-64, 36), Math.toRadians(192))
                 //.waitSeconds(0.5)
                 .build();
         if(!isStopRequested()) {
@@ -193,29 +196,32 @@ public class olita_albastra extends LinearOpMode {
                 })
                 .waitSeconds(0.5)*/
 
-                .splineTo(new Vector2d(-25, 55), Math.toRadians(0))
-                .lineToSplineHeading(new Pose2d(10, 55, Math.toRadians(185)))
+                .splineTo(new Vector2d(-25, 52.3), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(10, 52.3, Math.toRadians(185)))
                 .addDisplacementMarker(() -> new Thread(() -> {
                     erectie();
                     isCollecting = false;
                     p.sugator.setPower(0);
                 }).start())
-                .splineTo(new Vector2d(49.5, 31), Math.toRadians(0))
-
+                .splineTo(new Vector2d(49.5, 30.4), Math.toRadians(0))
+//                .addTemporalMarker(1, 0, () -> new Thread(() -> {
+//                    p.deschis();
+//                    disfunctieerectila();
+//                    servo();
+//                }).start())
                 .build();
         if(!isStopRequested()) {
             drive.followTrajectorySequence(ts3);
         }
         ts4 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(false)
-                .addDisplacementMarker(() -> {
+                .addDisplacementMarker(() -> new Thread(()-> {
                     p.deschis();
                     disfunctieerectila();
                     servo();
-                })
-                .waitSeconds(0.2)
-                .splineTo(new Vector2d(30, 62), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, 6251, Math.toRadians(185)))
+                }).start())
+                .splineTo(new Vector2d(15, 53), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 53, Math.toRadians(185)))
                 .addDisplacementMarker(() -> {
                     time_final_left = 0;
                     time_final_right = 0;
@@ -224,7 +230,7 @@ public class olita_albastra extends LinearOpMode {
                     isCollecting = true;
                     p.sugere2();
                 })
-                .splineTo(new Vector2d(-63.4, 39.8), Math.toRadians(190))
+                .splineTo(new Vector2d(-64.1, 35.5), Math.toRadians(190))
                 .waitSeconds(0.5)
                 //.addDisplacementMarker(this::senzor)
                 .build();
@@ -234,14 +240,14 @@ public class olita_albastra extends LinearOpMode {
         ts5 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
                 .addDisplacementMarker(()->p.scuipare())
-                .splineTo(new Vector2d(-25, 56.5), Math.toRadians(0))
-                .lineToSplineHeading(new Pose2d(11, 56.5, Math.toRadians(175)))
+                .splineTo(new Vector2d(-25, 54), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(11, 54, Math.toRadians(175)))
                 .addDisplacementMarker(() -> {
                     erectie();
                     isCollecting = false;
                     p.sugator.setPower(0);
                 })
-                .splineTo(new Vector2d(46.3, 36.9), Math.toRadians(0))
+                .splineTo(new Vector2d(46.3, 32), Math.toRadians(0))
                 .build();
         if(!isStopRequested()) {
             drive.followTrajectorySequence(ts5);
