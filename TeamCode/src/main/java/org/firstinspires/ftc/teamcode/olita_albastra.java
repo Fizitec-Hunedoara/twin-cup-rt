@@ -222,7 +222,7 @@ public class olita_albastra extends LinearOpMode {
                     servo();
                 }).start())
                 .splineTo(new Vector2d(15, 54), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, 54, Math.toRadians(185)))
+                .lineToSplineHeading(new Pose2d(-20, 54, Math.toRadians(185))) 
                 .addDisplacementMarker(() -> {
                     time_final_left = 0;
                     time_final_right = 0;
