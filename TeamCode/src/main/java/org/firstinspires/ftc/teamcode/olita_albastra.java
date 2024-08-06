@@ -243,7 +243,7 @@ public class olita_albastra extends LinearOpMode {
                 .splineTo(new Vector2d(-25, 54), Math.toRadians(0))
                 .lineToSplineHeading(new Pose2d(11, 54, Math.toRadians(175)))
                 .addDisplacementMarker(() -> {
-                    erectie();
+                    erectiets5();
                     isCollecting = false;
                     p.sugator.setPower(0);
                 })
@@ -362,6 +362,17 @@ public class olita_albastra extends LinearOpMode {
         p.kdf(300);
         altceva = true;
         p.ansamblul_leleseana(-200, 5000,15);
+        altceva = false;
+        p.kdf(50);
+        p.sculare();
+        p.kdf(50);
+        p.kdf(50);
+
+    }
+    public synchronized void erectiets5(){
+        p.kdf(300);
+        altceva = true;
+        p.ansamblul_leleseana(-255, 5000,15);
         altceva = false;
         p.kdf(50);
         p.sculare();
