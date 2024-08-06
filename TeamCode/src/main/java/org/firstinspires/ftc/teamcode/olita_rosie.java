@@ -102,7 +102,7 @@ public class olita_rosie extends LinearOpMode {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(44.2, -34.7, Math.toRadians(180)))
+                            .lineToLinearHeading(new Pose2d(44.8, -34.6, Math.toRadians(180)))
                             .waitSeconds(0.3)
                             .addDisplacementMarker( this::disfunctieerectila)
 
@@ -116,7 +116,7 @@ public class olita_rosie extends LinearOpMode {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(43.8, -28.4, Math.toRadians(180) ))
+                            .lineToLinearHeading(new Pose2d(44.1, -28.2, Math.toRadians(180) ))
                             .waitSeconds(0.2)
                             .addDisplacementMarker( this::disfunctieerectila)
                             .addDisplacementMarker(this::servo)
@@ -125,7 +125,7 @@ public class olita_rosie extends LinearOpMode {
                 }
                 if (Objects.equals(varrez, "Dreapta")) {
                     dreapta = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(22, -39, Math.toRadians(270)))
+                            .lineToSplineHeading(new Pose2d(23.1, -39, Math.toRadians(270)))
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
@@ -223,7 +223,7 @@ public class olita_rosie extends LinearOpMode {
                         ok2 = false;
                         p.kdf(300);
                     })
-                    .splineTo(new Vector2d(-62.95, -30.2), Math.toRadians(170))
+                    .splineTo(new Vector2d(-62.95, -30.7), Math.toRadians(170))
                     .waitSeconds(0.28)
                     .addDisplacementMarker(this::senzor)
                     .build();
@@ -240,7 +240,7 @@ public class olita_rosie extends LinearOpMode {
                         isCollecting = false;
                         p.sugator.setPower(0);
                     })
-                    .splineTo(new Vector2d(48.7, -36.9), Math.toRadians(0))
+                    .splineTo(new Vector2d(48.5, -36.6), Math.toRadians(0))
                     .build();
             if(!isStopRequested()) {
                 drive.followTrajectorySequence(ts5);
@@ -365,7 +365,7 @@ public class olita_rosie extends LinearOpMode {
     public synchronized void erectiets5(){
         p.kdf(300);
         altceva = true;
-        p.ansamblul_leleseana(-255, 5000,15);
+        p.ansamblul_leleseana(-300, 5000,15);
         altceva = false;
         p.kdf(50);
         p.sculare();

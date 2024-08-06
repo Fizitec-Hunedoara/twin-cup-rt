@@ -99,7 +99,7 @@ public class olita_albastra extends LinearOpMode {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(43.1, 35, Math.toRadians(180)))
+                            .lineToLinearHeading(new Pose2d(43.1, 34.2, Math.toRadians(180)))
                             .waitSeconds(0.3)
                             .addDisplacementMarker( this::disfunctieerectila)
 
@@ -108,12 +108,13 @@ public class olita_albastra extends LinearOpMode {
                 }
                 if (Objects.equals(varrez, "Stanga")) {
                     stanga = drive.trajectorySequenceBuilder(startPose)
-                            .lineToLinearHeading(new Pose2d(22, 35, Math.toRadians(90) )) //7,34
+                            .lineToSplineHeading(new Pose2d(22, 36.2, Math.toRadians(90) )) //7,34
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(35, 34, Math.toRadians(180) ))
+                            .lineToLinearHeading(new Pose2d(43, 41.8, Math.toRadians(180) ))
+                            .waitSeconds(0.3)
                             .addDisplacementMarker(()-> {
                                 p.kdf(600);
                                 disfunctieerectila();
@@ -124,12 +125,12 @@ public class olita_albastra extends LinearOpMode {
                 }
                 if (Objects.equals(varrez, "Dreapta")) {
                      dreapta = drive.trajectorySequenceBuilder(startPose)
-                            .lineToSplineHeading(new Pose2d(7, 34.6, Math.toRadians(45)))//22,.38.8
+                            .lineToSplineHeading(new Pose2d(6, 34.6, Math.toRadians(45)))//22,.38.8
                             .addDisplacementMarker( () -> {
                                 p.intake.setPosition(0.53);
                                 erectienoua();
                             })
-                            .lineToLinearHeading(new Pose2d(42.8, 27.2, Math.toRadians(180) ))
+                            .lineToLinearHeading(new Pose2d(43.3, 27.2, Math.toRadians(180) ))
                             .addDisplacementMarker(()-> {
                                 p.kdf(600);
                                 disfunctieerectila();
@@ -166,8 +167,8 @@ public class olita_albastra extends LinearOpMode {
         ts2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(false)
                 .waitSeconds(0.3)
-                .splineTo(new Vector2d(10, 51.5), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, 51.5, Math.toRadians(185)))
+                .splineTo(new Vector2d(10, 54), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 54, Math.toRadians(185)))
                 .addDisplacementMarker(() -> new Thread(() -> {
                     p.sugere1();
                     p.kdf(1500);
@@ -176,7 +177,7 @@ public class olita_albastra extends LinearOpMode {
                     p.kdf(1500);
                     p.scuipare();
                 }).start())
-                .splineTo(new Vector2d(-64, 36), Math.toRadians(192))
+                .splineTo(new Vector2d(-64.9, 36.9), Math.toRadians(192))
                 //.waitSeconds(0.5)
                 .build();
         if(!isStopRequested()) {
@@ -196,8 +197,8 @@ public class olita_albastra extends LinearOpMode {
                 })
                 .waitSeconds(0.5)*/
 
-                .splineTo(new Vector2d(-25, 52.3), Math.toRadians(0))
-                .lineToSplineHeading(new Pose2d(10, 52.3, Math.toRadians(185)))
+                .splineTo(new Vector2d(-25, 54), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(10, 54, Math.toRadians(185)))
                 .addDisplacementMarker(() -> new Thread(() -> {
                     erectie();
                     isCollecting = false;
@@ -220,8 +221,8 @@ public class olita_albastra extends LinearOpMode {
                     disfunctieerectila();
                     servo();
                 }).start())
-                .splineTo(new Vector2d(15, 53), Math.toRadians(180))
-                .lineToSplineHeading(new Pose2d(-20, 53, Math.toRadians(185)))
+                .splineTo(new Vector2d(15, 54), Math.toRadians(180))
+                .lineToSplineHeading(new Pose2d(-20, 54, Math.toRadians(185)))
                 .addDisplacementMarker(() -> {
                     time_final_left = 0;
                     time_final_right = 0;
@@ -230,7 +231,7 @@ public class olita_albastra extends LinearOpMode {
                     isCollecting = true;
                     p.sugere2();
                 })
-                .splineTo(new Vector2d(-64.1, 35.5), Math.toRadians(190))
+                .splineTo(new Vector2d(-64.3, 37.9), Math.toRadians(190))
                 .waitSeconds(0.5)
                 //.addDisplacementMarker(this::senzor)
                 .build();
@@ -240,8 +241,8 @@ public class olita_albastra extends LinearOpMode {
         ts5 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
                 .addDisplacementMarker(()->p.scuipare())
-                .splineTo(new Vector2d(-25, 54), Math.toRadians(0))
-                .lineToSplineHeading(new Pose2d(11, 54, Math.toRadians(175)))
+                .splineTo(new Vector2d(-25, 56.2), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(11, 56.2, Math.toRadians(175)))
                 .addDisplacementMarker(() -> {
                     erectiets5();
                     isCollecting = false;
@@ -372,7 +373,7 @@ public class olita_albastra extends LinearOpMode {
     public synchronized void erectiets5(){
         p.kdf(300);
         altceva = true;
-        p.ansamblul_leleseana(-255, 5000,15);
+        p.ansamblul_leleseana(-300, 5000,15);
         altceva = false;
         p.kdf(50);
         p.sculare();
